@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lux | Thread Tracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--Styles-->
+        <link rel="stylesheet" href="../dist/css/styles.css" />
+
+        <!--Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <!--Icons-->
+		<link href="https://dawneggleton.github.io/css/all.css" rel="stylesheet" />
+
+        <!--Script Libraries-->
+		<script type='text/javascript' src='https://files.jcink.net/html/jquery-1.7.2.min.js'></script>
+		<script type='text/javascript' src='https://files.jcink.net/html/jquery.cookie-1.3.1.js'></script> 
+		<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
+
+        <!--Settings-->
+        <script type='text/javascript' src='../dist/js/settings.js'></script>
+        <link rel="stylesheet" href="../dist/css/settings.css" />
+
+        <!--Scripts-->
+        <script type='text/javascript' src='../dist/js/functions.js'></script>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html" class="highlight"><i class="fa-solid fa-plus"></i> Add</a>
+                    <ul>
+                        <li><a href="./index.html">Add a Thread</a></li>
+                        <li><a href="./add-site.html">Add a Site</a></li>
+                        <li><a href="./add-character.html">Add a Character</a></li>
+                        <li><a href="./add-partner.html">Add a Partner</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="./gb.html">Godly Behaviour</a>
+                    <ul>
+                    <li><a href="./gb.html">Thread List</a></li>
+                    <!--<li><a href="./gb-charts.html">Charts</a></li>-->
+                    </ul>
+                </li>
+                <!--<li>
+                    <a href="./kyh.html" class="current">Kill Your Heroes</a>
+                    <ul>
+                    <li><a href="./kyh.html">Thread List</a></li>
+                    <li><a href="./kyh-charts.html">Charts</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="./legends.html">Legends</a>
+                    <ul>
+                    <li><a href="./legends.html">Thread List</a></li>
+                    <li><a href="./legends-charts.html">Charts</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="./totl.html">Turn on the Light</a>
+                    <ul>
+                    <li><a href="./totl.html">Thread List</a></li>
+                    <li><a href="./totl-charts.html">Charts</a></li>
+                    </ul>
+                </li>-->
+            </ul>
+        </nav>
+        <section>
+            <form id="add-partner">
+                <label class="fullWidth">
+                    <b>Site</b>
+                    <select required id="site">
+                        <option value="">(select)</option>
+                    </select>
+                </label>
+                <label>
+                    <b>Writer</b>
+                    <input required type="text" id="writer" />
+                </label>
+                <label>
+                    <b>Writer ID</b>
+                    <input required type="text" id="writerID" />
+                </label>
+                <label>
+                    <b>Character</b>
+                    <input required type="text" id="character" />
+                </label>
+                <label>
+                    <b>Character ID</b>
+                    <input required type="text" id="characterID" />
+                </label>
+                <button type="submit" class="fullWidth">Submit</button>
+            </form>
+        </section>
+
+        <!--Scripts-->
+        <script type='text/javascript' src='../dist/js/scripts.js'></script>
+    </body>
+</html>
