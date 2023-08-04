@@ -270,13 +270,17 @@ function configType(threads) {
 }
 
 function configPartners(threads) {
-    let threadPartners = threads.map(thread => thread.partners);
-    let consolidatedPartners = [...new Set(threadPartners)];
+    let threadPartners = threads.map(thread => thread.partners.split('+').map(item => JSON.parse(item)))[0];
+    let partnerNames = threadPartners.map(item => item.partner);
+    let consolidatedPartners = [...new Set(partnerNames)];
     let partnerCounts = consolidatedPartners.reduce((accumulator, value) => {
         return {...accumulator, [value]: 0};
     }, {});
     threads.forEach(thread => {
-        partnerCounts[thread.partners]++;
+        let thisPartners = thread.partners.split('+').map(item => JSON.parse(item)).map(item => item.partner);
+        thisPartners.forEach(partner => {
+            partnerCounts[partner]++;
+        });
     });
     let partners = [], counts = [];
     for (const partnerName in partnerCounts) {
