@@ -270,8 +270,8 @@ function configType(threads) {
 }
 
 function configPartners(threads) {
-    let threadPartners = threads.map(thread => thread.partners.split('+').map(item => JSON.parse(item)))[0];
-    let partnerNames = threadPartners.map(item => item.partner);
+    let threadPartners = threads.map(thread => thread.partners.split('+').map(item => JSON.parse(item)));
+    let partnerNames = threadPartners.map(item => item[0].partner);
     let consolidatedPartners = [...new Set(partnerNames)];
     let partnerCounts = consolidatedPartners.reduce((accumulator, value) => {
         return {...accumulator, [value]: 0};
