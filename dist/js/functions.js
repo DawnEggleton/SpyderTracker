@@ -127,6 +127,16 @@ function sendAjax(data, form = null) {
             console.log('complete');
             if(form) {
                 form.originalTarget.querySelector('button[type="submit"]').innerText = 'Submit';
+            } else if(data.Status === 'Theirs') {
+                thread.classList.remove('status--mine');
+                thread.classList.remove('status--start');
+                thread.classList.add('status--theirs');
+                thread.querySelector('[data-status]').innerText = 'Change Status';
+            } else if(data.Status === 'Mine') {
+                thread.classList.remove('status--theirs');
+                thread.classList.remove('status--expecting');
+                thread.classList.add('status--mine');
+                thread.querySelector('[data-status]').innerText = 'Change Status';
             }
         }
     });
@@ -135,27 +145,23 @@ function changeStatus(e) {
     if(e.dataset.status === 'mine' || e.dataset.status === 'start') {
         e.dataset.status = 'theirs';
         let thread = e.parentNode.parentNode.parentNode;
-        thread.classList.remove('status--mine');
-        thread.classList.remove('status--start');
-        thread.classList.add('status--theirs');
+        thread.querySelector('[data-status]').innerText = 'Changing...';
         sendAjax({
             'SubmissionType': 'edit-thread',
             'ThreadID': e.dataset.id,
             'Site': e.dataset.site,
             'Status': 'Theirs'
-        });
+        }, thread);
     } else if(e.dataset.status === 'theirs' || e.dataset.status === 'planned') {
         e.dataset.status = 'mine';
         let thread = e.parentNode.parentNode.parentNode;
-        thread.classList.remove('status--theirs');
-        thread.classList.remove('status--expecting');
-        thread.classList.add('status--mine');
+        thread.querySelector('[data-status]').innerText = 'Changing...';
         sendAjax({
             'SubmissionType': 'edit-thread',
             'ThreadID': e.dataset.id,
             'Site': e.dataset.site,
             'Status': 'Mine'
-        });
+        }, thread);
     }
 }
 function markComplete(e) {
