@@ -70,7 +70,7 @@ function formatThread(site, siteURL, status, character, feature, title, threadID
             partnerClasses += ` `;
         }
         partners += `<a href="${siteURL}/${directoryString}${partner.id.toLowerCase().trim()}">${partner.partner.toLowerCase().trim()}</a>`;
-        partnerClasses += `partner--${partner.partner.toLowerCase().trim().replaceAll(' ', '')}`;
+        partnerClasses += `partner--${partner.partner.toLowerCase().trim().replaceAll(' ', '').toLowerCase().trim()}`;
         if(partnerObjects.length !== (i + 1)) {
             partnerClasses += ` `;
             if(partnerObjects.length !== 2) {
@@ -93,7 +93,11 @@ function formatThread(site, siteURL, status, character, feature, title, threadID
             featuring += `,`;
         }
     });
-    console.log(featuring);
+    let buttons = ``;
+    if (status !== 'complete') {
+        buttons = `<button onClick="changeStatus(this)" data-status="${status}" data-id="${threadID}" data-site="${site}">Change Turn</button>
+        <button onClick="markComplete(this)" data-id="${threadID}" data-site="${site}">Mark Complete</button>`;
+    }
     let html = `<div class="thread lux-track grid-item status--${status} ${character.split(' ')[0]} delay--${delayClass} type--${type.split(' ')[0]} ${partnerClasses} grid-item"><div class="thread--wrap">
         <a class="thread--character" href="${siteURL}/?showuser=${character.split('#')[1]}">${character.split('#')[0]}</a>
         <a href="${siteURL}/?showtopic=${threadID}&view=getnewpost" target="_blank" class="thread--title">${title}</a>
@@ -101,15 +105,12 @@ function formatThread(site, siteURL, status, character, feature, title, threadID
         <span class="thread--partners">Writing with ${partners}</span>
         <span class="thread--ic-date">Set <span>${icDate}</span></span>
         <span class="thread--last-post">Last Active <span>${lastPost}</span></span>
-        <div class="thread--buttons">
-            <button onClick="changeStatus(this)" data-status="${status}" data-id="${threadID}" data-site="${site}">Change Turn</button>
-            <button onClick="markComplete(this)" data-id="${threadID}" data-site="${site}">Mark Complete</button>
-        </div>
+        <div class="thread--buttons">${buttons}</div>
     </div></div>`;
 
     return html;
 }
-function sendAjax(data, thread, form = null) {
+function sendAjax(data, thread, form = null, complete = null) {
     console.log('send ajax');
     $.ajax({
         url: `https://script.google.com/macros/s/AKfycbyhWkeLS1VlAMFP5mS9Omqax8BHjcUTkvWGdpQIHNy8iQsIKx59usD2KVrjy_JOTfi3/exec`,   
@@ -127,7 +128,13 @@ function sendAjax(data, thread, form = null) {
             console.log('complete');
             if(form) {
                 form.originalTarget.querySelector('button[type="submit"]').innerText = 'Submit';
-            } else if(data.Status === 'Theirs') {
+            } else if(complete) {
+                thread.classList.remove('status--mine');
+                thread.classList.remove('status--start');
+                thread.classList.remove('status--theirs');
+                thread.classList.remove('status--expecting');
+                thread.classList.add('status--complete');
+            }else if(data.Status === 'Theirs') {
                 thread.classList.remove('status--mine');
                 thread.classList.remove('status--start');
                 thread.classList.add('status--theirs');
@@ -167,17 +174,13 @@ function changeStatus(e) {
 function markComplete(e) {
     e.dataset.status = 'complete';
     let thread = e.parentNode.parentNode.parentNode;
-    thread.classList.remove('status--mine');
-    thread.classList.remove('status--start');
-    thread.classList.remove('status--theirs');
-    thread.classList.remove('status--expecting');
-    thread.classList.add('status--complete');
+    thread.querySelector('[data-status] + button').innerText = 'Updating...';
     sendAjax({
         'SubmissionType': 'edit-thread',
         'ThreadID': e.dataset.id,
         'Site': e.dataset.site,
         'Status': 'Complete'
-    });
+    }, thread, null, 'complete');
 }
 function addThread(e) {
     let site = e.currentTarget.querySelector('#site').options[e.currentTarget.querySelector('#site').selectedIndex].value.toLowerCase().trim(),
@@ -226,7 +229,7 @@ function addThread(e) {
         'Partner': partner,
         'Type': type,
         'LastUpdated': update
-    }, e);
+    }, null, e);
 }
 function populatePage(array, siteObject) {
     let html = ``;
@@ -581,7 +584,7 @@ function addCharacter(e) {
         'Site': site,
         'Character': character,
         'CharacterID': characterID
-    }, e);
+    }, null, e);
 }
 function addSite(e) {
     let directory = e.currentTarget.querySelector('#directory').options[e.currentTarget.querySelector('#directory').selectedIndex].value.trim(),
@@ -593,7 +596,7 @@ function addSite(e) {
         'Site': site,
         'URL': url,
         'Directory': directory
-    }, e);
+    }, null, e);
 }
 function partnerCheck(featureData, form) {
     let partnerField = form.querySelector('#writer');
@@ -623,7 +626,7 @@ function addPartner(e) {
         'CharacterID': characterID,
         'Writer': writer,
         'WriterID': writerID
-    }, e);
+    }, null, e);
 }
 function fixMc(str) {
     return (""+str).replace(/Mc(.)/g, function(m, m1) {
