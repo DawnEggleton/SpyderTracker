@@ -95,8 +95,8 @@ function formatThread(site, siteURL, status, character, feature, title, threadID
     });
     let buttons = ``;
     if (status !== 'complete') {
-        buttons = `<button onClick="changeStatus(this)" data-status="${status}" data-id="${threadID}" data-site="${site}">Change Turn</button>
-        <button onClick="markComplete(this)" data-id="${threadID}" data-site="${site}">Mark Complete</button>`;
+        buttons = `<button onClick="changeStatus(this)" data-status="${status}" data-id="${threadID}" data-site="${site}" data-character="${character.split('#')[0]}">Change Turn</button>
+        <button onClick="markComplete(this)" data-id="${threadID}" data-site="${site}" data-character="${character.split('#')[0]}">Mark Complete</button>`;
     }
     let html = `<div class="thread lux-track grid-item status--${status} ${character.split(' ')[0]} delay--${delayClass} type--${type.split(' ')[0]} ${partnerClasses} grid-item"><div class="thread--wrap">
         <a class="thread--character" href="${siteURL}/?showuser=${character.split('#')[1]}">${character.split('#')[0]}</a>
@@ -157,6 +157,7 @@ function changeStatus(e) {
             'SubmissionType': 'edit-thread',
             'ThreadID': e.dataset.id,
             'Site': e.dataset.site,
+            'Character': e.dataset.character,
             'Status': 'Theirs'
         }, thread);
     } else if(e.dataset.status === 'theirs' || e.dataset.status === 'planned') {
@@ -167,6 +168,7 @@ function changeStatus(e) {
             'SubmissionType': 'edit-thread',
             'ThreadID': e.dataset.id,
             'Site': e.dataset.site,
+            'Character': e.dataset.character,
             'Status': 'Mine'
         }, thread);
     }
@@ -179,6 +181,7 @@ function markComplete(e) {
         'SubmissionType': 'edit-thread',
         'ThreadID': e.dataset.id,
         'Site': e.dataset.site,
+        'Character': e.dataset.character,
         'Status': 'Complete'
     }, thread, null, 'complete');
 }
